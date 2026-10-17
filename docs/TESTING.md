@@ -31,14 +31,14 @@ atau memastikan perubahan UI tidak membuat aplikasi gagal start.
 | Area | Status | Catatan |
 |---|---|---|
 | Unit test (logika inti) | ✅ teruji | `cargo test`, 68 test |
-| Start GUI (Wayland/Niri nyata) | ✅ teruji | via `--smoke-test` |
+| Start GUI (Wayland/Niri nyata) | ✅ teruji | via `--smoke-test` (debug & release) |
+| Release build | ✅ teruji | `cargo build --release`, binary 5.2 MB, smoke lolos |
 | Transkripsi (stub whisper) | ✅ teruji | spawn subprocess nyata |
+| **IPC saat aplikasi berjalan** | ✅ teruji | `status`, `toggle`, `expand`, `pause`, `quit` terhadap instans nyata; `quit` menutup aplikasi dengan bersih |
 | **Capture audio nyata (pw-record)** | ⚠️ belum diuji end-to-end | device nyata + bicara perlu sesi manual |
 | **whisper-cli nyata + model GGML** | ⚠️ belum diuji | butuh paket `whisper-cpp` + model |
 | **Panggilan Groq nyata** | ⚠️ belum diuji di sesi ini | butuh API key; logika provider teruji dengan mock |
-| **IPC saat aplikasi berjalan** | ⚠️ belum diuji manual | unit test parsing ada; uji socket perlu instans hidup |
 | **gtk4-layer-shell** | ❌ belum teruji | paket tidak terpasang di mesin pengembangan |
-| Mode overlay window biasa | ✅ teruji (start) | perlu uji visual manual |
 | Ekspor sesi dari UI | ⚠️ belum diuji manual | logika ekspor teruji di unit test |
 
 ## Checklist uji manual (disarankan di mesin target)
