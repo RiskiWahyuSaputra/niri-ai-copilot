@@ -1,0 +1,37 @@
+# Maintainer: Riski Wahyu Saputra <arskies2005@gmail.com>
+pkgname=niri-ai-copilot
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Asisten interview real-time untuk Niri (Wayland): transkripsi lokal whisper.cpp + saran jawaban AI"
+arch=('x86_64' 'aarch64')
+url="https://github.com/RiskiWahyuSaputra/niri-ai-copilot"
+license=('MIT')
+depends=('gtk4' 'pipewire' 'gcc-libs')
+makedepends=('cargo' 'rust' 'pkgconf')
+optdepends=(
+    'whisper-cpp: transkripsi lokal (wajib untuk fitur STT)'
+    'poppler: ekstraksi teks CV dari PDF (pdftotext)'
+    'gtk4-layer-shell: mode overlay layer-shell'
+)
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+    cd "$pkgname-$pkgver"
+    cargo build --release --locked
+}
+
+check() {
+    cd "$pkgname-$pkgver"
+    cargo test --locked
+}
+
+package() {
+    cd "$pkgname-$pkgver"
+    install -Dm755 "target/release/niri-ai-copilot" "$pkgdir/usr/bin/niri-ai-copilot"
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+    for f in docs/*.md; do
+        install -Dm644 "$f" "$pkgdir/usr/share/doc/$pkgname/$(basename "$f")"
+    done
+}
