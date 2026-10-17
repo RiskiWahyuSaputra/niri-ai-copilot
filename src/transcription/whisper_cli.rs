@@ -232,4 +232,40 @@ kita mulai wawancara\n";
     fn find_in_path_does_not_find_nonsense() {
         assert!(find_in_path("definitely-not-a-real-binary-xyz").is_none());
     }
+
+    #[cfg(unix)]
+    #[test]
+    fn transcribe_with_stub_binary_end_to_end() {
+        use std::os::unix::fs::PermissionsExt;
+
+        let nanos = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_nanos())
+            .unwrap_or(0);
+        let dir = std::env::temp_dir().join(format!(
+            "niri-ai-copilot-stub-{}-{nanos}",
+            std::process::id()
+        ));
+        std::fs::create_dir_all(&dir).unwrap();
+        let bin = dir.join("fake-whisper");
+        std::fs::write(
+            &bin,
+            "#!/bin/sh\necho 'halo dari stub whisper'\necho '[BLANK_AUDIO]'\necho 'whisper_print_timings: total time = 5 ms'\n",
+        )
+        .unwrap();
+        std::fs::set_permissions(&bin, std::fs::Permissions::from_mode(0o755)).unwrap();
+        let model = dir.join("ggml-stub.bin");
+        std::fs::write(&model, b"stub model").unwrap();
+
+        let mut s = Settings::default();
+        s.stt.binary = bin.to_string_lossy().to_string();
+        s.stt.model = model.to_string_lossy().to_string();
+        let engine = WhisperCli::from_settings(&s);
+        engine.check_ready().unwrap();
+
+        let text = engine.transcribe(&[0u8; 64], "auto").unwrap();
+        assert_eq!(text, "halo dari stub whisper");
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
 }
