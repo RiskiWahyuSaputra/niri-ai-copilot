@@ -9,7 +9,7 @@
 use std::io::Read;
 use std::process::{Child, Command, Stdio};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{mpsc::Sender, Arc, Mutex};
+use std::sync::{mpsc::SyncSender, Arc, Mutex};
 use std::thread::JoinHandle;
 
 use crate::audio::pcm::{self, Chunker, BYTES_PER_100MS};
@@ -48,7 +48,10 @@ pub struct AudioChunk {
 pub enum CaptureEvent {
     Chunk(AudioChunk),
     /// Stream berakhir (mis. microphone terputus) — pesan opsional.
-    Ended(Option<String>),
+    Ended {
+        source: AudioSourceKind,
+        message: Option<String>,
+    },
     Error(String),
 }
 
@@ -71,7 +74,7 @@ impl CaptureHandle {
         device: Option<String>,
         chunk_seconds: u32,
         paused: Arc<AtomicBool>,
-        send: Sender<CaptureEvent>,
+        send: SyncSender<CaptureEvent>,
     ) -> Result<Self> {
         let mut cmd = Command::new("pw-record");
         cmd.args([
@@ -169,7 +172,7 @@ fn reader_loop(
     chunk_seconds: u32,
     paused: Arc<AtomicBool>,
     stop: Arc<AtomicBool>,
-    send: Sender<CaptureEvent>,
+    send: SyncSender<CaptureEvent>,
 ) {
     // Thread terpisah membaca stderr agar pipe tidak penuh dan pesan error
     // PipeWire bisa dilaporkan.
@@ -203,11 +206,14 @@ fn reader_loop(
             Ok(0) => {
                 // EOF: stream berakhir (mis. microphone terputus).
                 let msg = stderr_snapshot(&stderr_buf);
-                let _ = send.send(CaptureEvent::Ended(Some(if msg.is_empty() {
-                    format!("stream {} berakhir", kind.label())
-                } else {
-                    msg
-                })));
+                let _ = send.send(CaptureEvent::Ended {
+                    source: kind,
+                    message: Some(if msg.is_empty() {
+                        format!("stream {} berakhir", kind.label())
+                    } else {
+                        msg
+                    }),
+                });
                 break;
             }
             Ok(n) => {
@@ -256,7 +262,6 @@ fn reader_loop(
         }
     }
     let _ = stderr_reader.join();
-    let _ = send.send(CaptureEvent::Ended(None));
 }
 
 fn stderr_snapshot(buf: &Arc<Mutex<String>>) -> String {
@@ -288,7 +293,7 @@ mod tests {
         // Gunakan PATH kosong agar pw-record "tidak ditemukan".
         let old_path = std::env::var_os("PATH");
         std::env::set_var("PATH", "/nonexistent");
-        let (tx, _rx) = std::sync::mpsc::channel();
+        let (tx, _rx) = std::sync::mpsc::sync_channel(2);
         let res = CaptureHandle::spawn(
             AudioSourceKind::Mic,
             None,
