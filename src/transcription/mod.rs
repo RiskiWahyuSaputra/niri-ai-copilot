@@ -2,7 +2,7 @@ pub mod engine;
 pub mod pipeline;
 pub mod whisper_cli;
 
-pub use engine::{NullEngine, SttEngine};
+pub use engine::SttEngine;
 pub use pipeline::{SttEvent, SttJob, SttWorker};
 pub use whisper_cli::WhisperCli;
 

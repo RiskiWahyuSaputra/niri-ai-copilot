@@ -11,5 +11,4 @@ pub mod capture;
 pub mod devices;
 pub mod pcm;
 
-pub use capture::{AudioSourceKind, CaptureHandle, CaptureEvent};
 pub use devices::{list_sources, AudioDevice};
