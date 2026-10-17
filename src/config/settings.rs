@@ -105,6 +105,8 @@ impl AnswerLength {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Appearance {
+    /// Theme UI. Saat ini hanya "dark" yang diimplementasikan.
+    pub theme: String,
     /// Opacity widget (0.55 – 1.0).
     pub opacity: f64,
     /// Lebar widget compact dalam pixel.
@@ -120,6 +122,7 @@ pub struct Appearance {
 impl Default for Appearance {
     fn default() -> Self {
         Self {
+            theme: "dark".into(),
             opacity: 0.94,
             compact_width: 330,
             font_size: 14.0,
@@ -348,6 +351,9 @@ impl Settings {
 
     /// Bersihkan nilai di luar rentang yang wajar.
     pub fn normalize(&mut self) {
+        if self.appearance.theme != "dark" {
+            self.appearance.theme = "dark".into();
+        }
         self.appearance.opacity = self.appearance.opacity.clamp(0.55, 1.0);
         self.appearance.compact_width = self.appearance.compact_width.clamp(260, 520);
         self.appearance.font_size = self.appearance.font_size.clamp(11.0, 22.0);
