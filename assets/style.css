@@ -1,0 +1,154 @@
+/* Niri AI Copilot — dark theme minimalis (aksen indigo/ungu) */
+
+window {
+  background: transparent;
+}
+
+.card {
+  background: rgba(15, 17, 26, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 12px;
+  color: #e5e7eb;
+}
+
+.header-title {
+  font-weight: 700;
+  font-size: 0.95em;
+  color: #f3f4f6;
+}
+
+.header-sub {
+  font-size: 0.78em;
+  color: #9ca3af;
+}
+
+.logo-dot {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border-radius: 7px;
+  min-width: 22px;
+  min-height: 22px;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.72em;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 1px 10px;
+  font-size: 0.78em;
+  font-weight: 600;
+}
+
+.pill-idle { background: rgba(107, 114, 128, 0.25); color: #d1d5db; }
+.pill-listening { background: rgba(34, 197, 94, 0.22); color: #86efac; }
+.pill-paused { background: rgba(245, 158, 11, 0.22); color: #fcd34d; }
+.pill-processing { background: rgba(99, 102, 241, 0.28); color: #c7d2fe; }
+.pill-error { background: rgba(239, 68, 68, 0.25); color: #fca5a5; }
+
+.rec-dot {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.rec-label {
+  color: #fca5a5;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.timer {
+  color: #9ca3af;
+  font-size: 0.8em;
+}
+
+button.tool {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  padding: 5px 10px;
+  color: #e5e7eb;
+  font-size: 0.82em;
+}
+
+button.tool:hover { background: rgba(255, 255, 255, 0.12); }
+button.tool:disabled { opacity: 0.45; }
+
+button.primary {
+  background: #4f46e5;
+  border: none;
+  border-radius: 9px;
+  padding: 5px 12px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.82em;
+}
+button.primary:hover { background: #4338ca; }
+button.primary:disabled { opacity: 0.5; }
+
+button.danger {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 9px;
+  padding: 5px 10px;
+  color: #fca5a5;
+  font-size: 0.82em;
+}
+button.danger:hover { background: rgba(239, 68, 68, 0.3); }
+
+.panel {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.panel-title {
+  font-size: 0.74em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #8b93a7;
+  text-transform: uppercase;
+}
+
+.panel-body { color: #e5e7eb; font-size: 0.86em; }
+
+.transcript-mic { color: #dbeafe; }
+.transcript-meeting { color: #ede9fe; }
+.transcript-meta { color: #6b7280; font-size: 0.75em; }
+
+.keyword-chip {
+  background: rgba(99, 102, 241, 0.18);
+  border-radius: 8px;
+  padding: 2px 8px;
+  color: #c7d2fe;
+  font-size: 0.78em;
+}
+
+.answer-body {
+  background: rgba(99, 102, 241, 0.08);
+  border-left: 3px solid #6366f1;
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.hint { color: #fbbf24; font-size: 0.8em; }
+.dim { color: #9ca3af; font-size: 0.8em; }
+
+.level-bar trough { background: rgba(255, 255, 255, 0.08); border-radius: 3px; min-height: 5px; }
+.level-bar progress { background: #22c55e; border-radius: 3px; min-height: 5px; }
+
+scrollbar slider { background: rgba(255, 255, 255, 0.16); border-radius: 4px; }
+
+textview.notes text { background: transparent; color: #e5e7eb; }
+textview.notes { background: rgba(255, 255, 255, 0.04); border-radius: 8px; }
+
+entry, combobox, spinbutton {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  min-height: 24px;
+}
+
+dialog .card, window.dialog .card { padding: 16px; }
